@@ -1,5 +1,5 @@
 import numpy as np
-from agents.Common import BoardPiece, NO_PLAYER, PlayerAction
+from agents.Common import BoardPiece, NO_PLAYER, PlayerAction, PLAYER1, PLAYER2
 from agents.tests.test_helpers import *
 
 
@@ -37,16 +37,21 @@ def test_string_to_board():
     assert np.all(ret == test_board)
 
 
-'''
 def test_apply_player_action():
     from agents.Common import apply_player_action
 
-    ret = apply_player_action(board, action, player, copy)
+    test_board = initialize_test_board()
+    player = PLAYER1
+    action = PlayerAction(6)
+    ret = apply_player_action(test_board, action, player)
+    test_board[0, action] = PLAYER1
     assert isinstance(ret, np.ndarray)
     assert ret.dtype == BoardPiece
     assert ret.shape == (6, 7)
+    assert np.all(ret == test_board)
 
 
+'''
 def test_connected_four():
     from agents.Common import connected_four
 

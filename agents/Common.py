@@ -97,8 +97,8 @@ def apply_player_action(
     """
     if copy:
         board = np.copy(board)
-    row = np.where(board.T[PlayerAction] == 0)[0][0]
-    board[row, PlayerAction] = player
+    row = np.where(board.T[action] == 0)[0][0]
+    board[row, action] = player
     return board
 
 
