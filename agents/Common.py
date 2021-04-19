@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Optional
 import numpy as np
 from numpy import ndarray
+from typing import Callable, Tuple
 
 BoardPiece = np.int8  # The data type (dtype) of the board
 
@@ -17,6 +18,12 @@ PLAYER2_PRINT = BoardPiecePrint('O')
 
 PlayerAction = np.int8  # The column to be played
 
+'''
+GenMove = Callable[
+    [np.ndarray, BoardPiece, Optional[SavedState]],  # Arguments for the generate_move function
+    Tuple[PlayerAction, Optional[SavedState]]  # Return type of the generate_move function
+]'''
+
 translation = str.maketrans("012[]", " XO||")
 
 
@@ -24,6 +31,9 @@ class GameState(Enum):
     IS_WIN = 1
     IS_DRAW = -1
     STILL_PLAYING = 0
+
+class SavedState:
+    pass
 
 
 def initialize_game_state() -> np.ndarray:
@@ -74,7 +84,7 @@ def string_to_board(pp_board: str) -> np.ndarray:
         new_board[i] = np.array(list(partial_board[i]), dtype=BoardPiece)
     index = [i for i in range(1, 13, 2)]
 
-    new_board = np.delete(new_board, index, 1)
+    new_board = np.delete(new_board, index, 1).astype(BoardPiece)
     return np.flipud(new_board)
 
 
