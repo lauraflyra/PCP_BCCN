@@ -51,17 +51,32 @@ def test_apply_player_action():
     assert np.all(ret == test_board)
 
 
-'''
 def test_connected_four():
     from agents.Common import connected_four
 
-    ret = connected_four(board, player, last_action)
-    assert isinstance(ret, bool)
+    test_board = initialize_test_board()
+    player = PLAYER1
+    ret_not = connected_four(test_board, player)
+    test_board[0, 5] = PLAYER1
+    test_board[0, 0] = PLAYER2
+    test_board[0, 6] = PLAYER1
+    ret_win = connected_four(test_board, player)
+    assert not ret_not
+    assert ret_win
 
 
 def test_check_end_state():
     from agents.Common import check_end_state, GameState
 
-    ret = check_end_state(board, player, last_action)
-    assert isinstance(ret, GameState)
-'''
+    test_board = initialize_test_board()
+    player = PLAYER1
+    ret_playing = check_end_state(test_board, player)
+    test_board[0, 5] = PLAYER1
+    test_board[0, 0] = PLAYER2
+    test_board[0, 6] = PLAYER1
+    ret_win = check_end_state(test_board, player)
+
+    assert isinstance(ret_playing, GameState)
+    assert ret_playing == GameState.STILL_PLAYING
+    assert isinstance(ret_win, GameState)
+    assert ret_win == GameState.IS_WIN

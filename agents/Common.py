@@ -18,11 +18,15 @@ PLAYER2_PRINT = BoardPiecePrint('O')
 
 PlayerAction = np.int8  # The column to be played
 
-'''
+
+class SavedState:
+    pass
+
+
 GenMove = Callable[
     [np.ndarray, BoardPiece, Optional[SavedState]],  # Arguments for the generate_move function
     Tuple[PlayerAction, Optional[SavedState]]  # Return type of the generate_move function
-]'''
+]
 
 translation = str.maketrans("012[]", " XO||")
 
@@ -31,9 +35,6 @@ class GameState(Enum):
     IS_WIN = 1
     IS_DRAW = -1
     STILL_PLAYING = 0
-
-class SavedState:
-    pass
 
 
 def initialize_game_state() -> np.ndarray:

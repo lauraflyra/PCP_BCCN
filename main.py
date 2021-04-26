@@ -1,7 +1,7 @@
 import numpy as np
 from typing import Optional, Callable
 from agents.Common import PlayerAction, BoardPiece, SavedState, GenMove
-
+from agents.agent_random import generate_move
 
 def user_move(board: np.ndarray, _player: BoardPiece, saved_state: Optional[SavedState]):
     action = PlayerAction(-1)
@@ -24,8 +24,8 @@ def human_vs_agent(
     init_2: Callable = lambda board, player: None,
 ):
     import time
-    from agents.common import PLAYER1, PLAYER2, PLAYER1_PRINT, PLAYER2_PRINT, GameState
-    from agents.common import initialize_game_state, pretty_print_board, apply_player_action, check_end_state
+    from agents.Common import PLAYER1, PLAYER2, PLAYER1_PRINT, PLAYER2_PRINT, GameState
+    from agents.Common import initialize_game_state, pretty_print_board, apply_player_action, check_end_state
 
     players = (PLAYER1, PLAYER2)
     for play_first in (1, -1):
@@ -67,4 +67,5 @@ def human_vs_agent(
 
 
 if __name__ == "__main__":
+#    human_vs_agent(generate_move)
     human_vs_agent(user_move)

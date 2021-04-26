@@ -2,7 +2,7 @@ import numpy as np
 from agents.Common import BoardPiece, PLAYER1, PLAYER2, initialize_game_state
 
 
-def initialize_test_board():
+def initialize_test_board() -> np.ndarray:
     test_board = initialize_game_state()
     test_board[0, 1] = PLAYER2
     test_board[1, 1] = PLAYER2
