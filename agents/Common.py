@@ -98,7 +98,7 @@ def apply_player_action(
     """
     if copy:
         board = np.copy(board)
-    row = np.where(board.T[action] == 0)[0][0]
+    row = np.where(board.T[action] == NO_PLAYER)[0][0]
     board[row, action] = player
     return board
 
@@ -188,3 +188,38 @@ def check_end_state(
             return GameState.STILL_PLAYING
         else:
             return GameState.IS_DRAW
+
+
+def connected_some(
+        board: np.ndarray, player: BoardPiece, sequence, last_action: Optional[PlayerAction] = None,
+) -> bool:
+    """
+    Returns True if there are four adjacent pieces equal to `player` arranged
+    in either a horizontal, vertical, or diagonal line. Returns False otherwise.
+    If desired, the last action taken (i.e. last column played) can be provided
+    for potential speed optimisation.
+    """
+
+    board_transposed = board.T
+    board_flipped = np.flipud(board)
+    rows, columns = board.shape
+    for row in range(rows):
+        found = np.array(search_sequence_numpy(board[row], sequence))
+        if found.shape[0] != 0:
+            return True
+
+    for column in range(columns):
+        found = np.array(search_sequence_numpy(board_transposed[column], sequence))
+        if found.shape[0] != 0:
+            return True
+
+    for offset in range(-2, 2):
+        found = np.array(search_sequence_numpy(np.diag(board, k=offset), sequence))
+        if found.shape[0] != 0:
+            return True
+        else:
+            found = np.array(search_sequence_numpy(np.diag(board_flipped, k=offset), sequence))
+            if found.shape[0] != 0:
+                return True
+
+    return False
