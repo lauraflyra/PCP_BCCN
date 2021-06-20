@@ -8,6 +8,10 @@ from more_itertools import distinct_permutations
 DEPTH = BoardPiece(3)
 GOOD_SEQUENCE = np.array([1, 1, 1, 0])
 
+"""
+IMPLEMENTATION OF MINIMAX WITHOUT PRUNING! FOR MINIMAX WITH ALPHA BETA PRUNING CHECK: agent_minimax_prunning.minimax_with_pruning
+"""
+
 
 def board_children(board: np.ndarray, player: BoardPiece) -> Tuple[np.ndarray, np.ndarray]:
     """

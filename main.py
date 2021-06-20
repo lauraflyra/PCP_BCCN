@@ -1,10 +1,24 @@
 import numpy as np
-from typing import Optional, Callable
+from typing import Optional, Callable, Tuple
 from agents.Common import PlayerAction, BoardPiece, SavedState, GenMove
 from agents.agent_random import generate_move
 from agents.agent_minimax import generate_move_minimax
+from agents.agent_minimax_prunning import generate_move_minimax_pruning
 
-def user_move(board: np.ndarray, _player: BoardPiece, saved_state: Optional[SavedState]):
+
+def user_move(board: np.ndarray, _player: BoardPiece, saved_state: Optional[SavedState]) -> Tuple[
+    PlayerAction, Optional[SavedState]]:
+    """
+
+    :param board: current state of the board
+    :param _player: which player the user is
+    :param saved_state: The idea is that the first time in a game that generate_move is called,
+    the value of that argument is None.
+    Then in the process of choosing its first action,
+    your agent might do a bunch of computation that it could reuse for future moves.
+    Instead of just throwing that away, you can put it in an instance of your SavedState class'
+    :return: move that the current player chose and saved_state again, because it's not going to be used for now
+    """
     action = PlayerAction(-1)
     while not 0 <= action < board.shape[1]:
         try:
@@ -15,14 +29,14 @@ def user_move(board: np.ndarray, _player: BoardPiece, saved_state: Optional[Save
 
 
 def human_vs_agent(
-    generate_move_1: GenMove,
-    generate_move_2: GenMove = user_move,
-    player_1: str = "Player 1",
-    player_2: str = "Player 2",
-    args_1: tuple = (),
-    args_2: tuple = (),
-    init_1: Callable = lambda board, player: None,
-    init_2: Callable = lambda board, player: None,
+        generate_move_1: GenMove,
+        generate_move_2: GenMove = user_move,
+        player_1: str = "Player 1",
+        player_2: str = "Player 2",
+        args_1: tuple = (),
+        args_2: tuple = (),
+        init_1: Callable = lambda board, player: None,
+        init_2: Callable = lambda board, player: None,
 ):
     import time
     from agents.Common import PLAYER1, PLAYER2, PLAYER1_PRINT, PLAYER2_PRINT, GameState
@@ -42,7 +56,7 @@ def human_vs_agent(
         playing = True
         while playing:
             for player, player_name, gen_move, args in zip(
-                players, player_names, gen_moves, gen_args,
+                    players, player_names, gen_moves, gen_args,
             ):
                 t0 = time.time()
                 print(pretty_print_board(board))
@@ -68,6 +82,10 @@ def human_vs_agent(
 
 
 if __name__ == "__main__":
-#    human_vs_agent(generate_move)
-#    human_vs_agent(user_move)
-    human_vs_agent(generate_move_minimax)
+    """
+    uncomment function corresponding to game we want to play
+    """
+    #    human_vs_agent(generate_move)
+    #    human_vs_agent(user_move)
+    #    human_vs_agent(generate_move_1=generate_move_minimax, generate_move_2=generate_move_minimax_pruning)
+    human_vs_agent(generate_move_1=generate_move_minimax_pruning, generate_move_2=generate_move_minimax_pruning)

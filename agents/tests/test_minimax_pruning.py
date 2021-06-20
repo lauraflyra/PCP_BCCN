@@ -1,7 +1,7 @@
 import numpy as np
 from agents.Common import BoardPiece, NO_PLAYER, PlayerAction, PLAYER1, PLAYER2
 from agents.tests.test_helpers import *
-from typing import Tuple
+from typing import Tuple, Union, Any
 
 
 def test_board_children():
@@ -25,16 +25,27 @@ def test_change_player():
     assert change_player(players[1]) == players[0]
 
 
-def test_maximize():
-    from agents.agent_minimax_prunning.minimax_with_prunning import maximize, generate_move_minimax_pruning, minimize
+def test_maximize_minimize():
+    """
+    if minimize and maximize work, calling maximize for PLAYER1 (for example) should return the
+    same move than calling minimize for it's opponent, PLAYER2 (for example).
+    """
+    from agents.agent_minimax_prunning.minimax_with_prunning import maximize, minimize
+
     test_board = initialize_test_board()
-    # by looking just one step into the future, the agent should
-    # print(maximize(test_board, agent=PLAYER1, opponent=PLAYER2, current_depth=BoardPiece(0)))
-    # print(minimize(test_board, agent=PLAYER1, opponent=PLAYER2, current_depth=DEPTH-1))
-    # print(generate_move_minimax_pruning(test_board, PLAYER1))
-    ret = maximize(test_board, agent=PLAYER1, opponent=PLAYER2, current_depth=BoardPiece(0))
-    gen_move = generate_move_minimax_pruning(test_board, PLAYER1)
-    print(ret, gen_move)
-    ret = maximize(test_board, agent=PLAYER2, opponent=PLAYER1, current_depth=BoardPiece(0))
-    gen_move = generate_move_minimax_pruning(test_board, PLAYER2)
-    print(ret, gen_move)
+
+    alpha = -np.inf
+    beta = np.inf
+
+    ret_maximize_1 = maximize(test_board, agent=PLAYER1, opponent=PLAYER2, current_depth=BoardPiece(0))
+    ret_maximize_2 = maximize(test_board, agent=PLAYER2, opponent=PLAYER1, current_depth=BoardPiece(0))
+    ret_minimize_1 = minimize(test_board, agent=PLAYER2, opponent=PLAYER1, current_depth=BoardPiece(0))
+    ret_minimize_2 = minimize(test_board, agent=PLAYER1, opponent=PLAYER2, current_depth=BoardPiece(0))
+
+    assert ret_maximize_1[1] > alpha
+    assert ret_maximize_1[1] > alpha
+    assert ret_minimize_1[1] < beta
+    assert ret_minimize_1[1] < beta
+
+    assert ret_maximize_1[0] == ret_minimize_1[0]
+    assert ret_maximize_2[0] == ret_minimize_2[0]

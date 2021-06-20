@@ -131,7 +131,7 @@ def calculate_utility(board: np.ndarray, agent: BoardPiece, opponent: BoardPiece
         if connected_some(board, opponent, sequence):
             return -18
         if connected_some(board, agent, sequence):
-            utility += 4
+            utility += 6
     else:
         utility = np.random.randint(0, 6)
 
