@@ -1,0 +1,1 @@
+from .minimax_with_prunning import generate_move_minimax_pruning as generate_move_minimax_pruning
